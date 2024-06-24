@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="{% get_current_language as CURRENT_LANG %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ article.title }}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between mb-4">
+            <!-- Bouton pour changer la langue -->
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}">
+                {% if CURRENT_LANG == 'fr' %}
+                    <button type="submit" name="language" value="en" class="btn btn-outline-primary">English</button>
+                {% elif CURRENT_LANG == 'en' %}
+                    <button type="submit" name="language" value="fr" class="btn btn-outline-primary">Français</button>
+                {% endif %}
+            </form>
+            <!-- Bouton pour le chatbot -->
+            <a href="{% url 'chatbot_view' %}" class="btn btn-success">{% trans "Chat with Bot" %}</a>
+        </div>
+        <h1 class="mb-4">{{ article.title }}</h1>
+        <p class="text-muted">{{ article.publication_date }}</p>
+        <div class="mb-4">
+            {{ article.content }}
+        </div>
+        <a href="{% url 'article_list' %}" class="btn btn-secondary">{% trans "Back to Articles" %}</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
